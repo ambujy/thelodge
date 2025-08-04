@@ -15,6 +15,7 @@ import com.thelodge.repository.DesignationRepository;
 import com.thelodge.repository.EmployeeRepository;
 import com.thelodge.repository.HotelRepository;
 import com.thelodge.service.EmployeeService;
+import com.thelodge.util.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -66,21 +67,21 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 .address(address)
                                 .build();
 
-                return mapToDto(employeeRepository.save(employee));
+                return DtoMapper.mapToEmployeeDto(employeeRepository.save(employee));
         }
 
         @Override
         public EmployeeResponseDto getEmployeeById(Integer id) {
                 Employee employee = employeeRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("Employee not found"));
-                return mapToDto(employee);
+                return DtoMapper.mapToEmployeeDto(employee);
         }
 
         @Override
         public List<EmployeeResponseDto> getAllEmployees() {
                 return employeeRepository.findAll()
                                 .stream()
-                                .map(this::mapToDto)
+                                .map(DtoMapper::mapToEmployeeDto)
                                 .toList();
         }
 
@@ -121,68 +122,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setHotel(hotel);
                 employee.setDesignation(designation);
 
-                return mapToDto(employeeRepository.save(employee));
+                return DtoMapper.mapToEmployeeDto(employeeRepository.save(employee));
         }
 
         @Override
         public void deleteEmployee(Integer id) {
                 employeeRepository.deleteById(id);
-        }
-
-        private EmployeeResponseDto mapToDto(Employee employee) {
-                return EmployeeResponseDto.builder()
-                                .id(employee.getId())
-                                .firstName(employee.getFirstName())
-                                .lastName(employee.getLastName())
-                                .gender(employee.getGender().name())
-                                .phone(employee.getPhone())
-                                .email(employee.getEmail())
-                                .idProofType(employee.getIdProofType())
-                                .idProofNo(employee.getIdProofNo())
-                                .idProofFile(employee.getIdProofFile())
-                                .dob(employee.getDob())
-                                .address(mapToAddressDto(employee.getAddress()))
-                                .designation(mapToDesignationDto(employee.getDesignation()))
-                                .hotel(mapToHotelDto(employee.getHotel()))
-                                .createdAt(employee.getCreatedAt())
-                                .updatedAt(employee.getUpdatedAt())
-                                .deletedAt(employee.getDeletedAt())
-                                .build();
-        }
-
-        private AddressDto mapToAddressDto(Address address) {
-                if (address == null)
-                        return null;
-
-                return AddressDto.builder()
-                                .id(address.getId())
-                                .line1(address.getLine1())
-                                .line2(address.getLine2())
-                                .line3(address.getLine3())
-                                .state(address.getState())
-                                .city(address.getCity())
-                                .pincode(address.getPincode())
-                                .build();
-        }
-
-        private DesignationDto mapToDesignationDto(Designation designation) {
-                if (designation == null)
-                        return null;
-
-                return DesignationDto.builder()
-                                .id(designation.getId())
-                                .title(designation.getTitle())
-                                .build();
-        }
-
-        private HotelDto mapToHotelDto(Hotel hotel) {
-                if (hotel == null)
-                        return null;
-
-                return HotelDto.builder()
-                                .id(hotel.getId())
-                                .name(hotel.getName())
-                                .build();
         }
 
         private Gender parseGender(String genderStr) {

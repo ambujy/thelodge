@@ -1,9 +1,9 @@
 package com.thelodge.repository;
 
-import com.thelodge.entity.Designation;
+import com.thelodge.entity.Guest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DesignationRepository extends JpaRepository<Designation, Integer> {
+public interface GuestRepository extends JpaRepository<Guest, Integer> {
 }
