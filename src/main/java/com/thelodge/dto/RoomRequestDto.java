@@ -8,6 +8,6 @@ import lombok.*;
 @Builder
 public class RoomRequestDto {
     private Integer roomNumber;
-    private Integer roomTypeId;
+    private RoomTypeDto roomType;
     private HotelDto hotel;
 }

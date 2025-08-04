@@ -3,6 +3,7 @@ package com.thelodge.service.impl;
 import com.thelodge.dto.HotelDto;
 import com.thelodge.dto.RoomRequestDto;
 import com.thelodge.dto.RoomResponseDto;
+import com.thelodge.dto.RoomTypeDto;
 import com.thelodge.entity.Hotel;
 import com.thelodge.entity.Room;
 import com.thelodge.entity.RoomType;
@@ -28,8 +29,13 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomResponseDto createRoom(RoomRequestDto dto) {
-        
-        RoomType roomType = roomTypeRepository.findById(dto.getRoomTypeId())
+
+        RoomTypeDto roomTypeDto = dto.getRoomType();
+        if (roomTypeDto == null || roomTypeDto.getId() == null) {
+            throw new IllegalArgumentException("RoomType information is required");
+        }
+
+        RoomType roomType = roomTypeRepository.findById(roomTypeDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("RoomType not found"));
 
         HotelDto hotelDto = dto.getHotel();
