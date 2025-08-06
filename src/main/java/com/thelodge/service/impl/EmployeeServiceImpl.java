@@ -9,7 +9,7 @@ import com.thelodge.entity.Address;
 import com.thelodge.entity.Designation;
 import com.thelodge.entity.Employee;
 import com.thelodge.entity.Hotel;
-import com.thelodge.enums.Gender;
+import com.thelodge.enums.GenderType;
 import com.thelodge.repository.AddressRepository;
 import com.thelodge.repository.DesignationRepository;
 import com.thelodge.repository.EmployeeRepository;
@@ -130,19 +130,19 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeeRepository.deleteById(id);
         }
 
-        private Gender parseGender(String genderStr) {
+        private GenderType parseGender(String genderStr) {
                 if (genderStr == null) {
                         throw new IllegalArgumentException("Gender cannot be null");
                 }
 
-                for (Gender gender : Gender.values()) {
+                for (GenderType gender : GenderType.values()) {
                         if (gender.name().equalsIgnoreCase(genderStr.trim())) {
                                 return gender;
                         }
                 }
 
                 throw new IllegalArgumentException("Invalid gender value: " + genderStr +
-                                ". Allowed values: " + List.of(Gender.values()));
+                                ". Allowed values: " + List.of(GenderType.values()));
         }
 
 }

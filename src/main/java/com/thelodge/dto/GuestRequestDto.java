@@ -1,6 +1,6 @@
 package com.thelodge.dto;
 
-import com.thelodge.enums.Gender;
+import com.thelodge.enums.GenderType;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ public class GuestRequestDto {
     private String idProofNo;
     private String idProofFile;
     private LocalDate dob;
-    private Gender gender;
+    private GenderType gender;
     private AddressDto address;
     private HotelDto hotel;
 }

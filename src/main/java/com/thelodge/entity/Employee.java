@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import com.thelodge.enums.Gender;
+import com.thelodge.enums.GenderType;
 
 @Entity
 @Table(name = "employee", schema = "thelodge")
@@ -66,5 +66,5 @@ public class Employee {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", columnDefinition = "thelodge.gender_enum")
-    private Gender gender;
+    private GenderType gender;
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
-import com.thelodge.enums.Gender;
+import com.thelodge.enums.GenderType;
 
 @Entity
 @Table(name = "guest", schema = "thelodge")
@@ -41,7 +41,7 @@ public class Guest {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", columnDefinition = "thelodge.gender_enum")
-    private Gender gender;
+    private GenderType gender;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
