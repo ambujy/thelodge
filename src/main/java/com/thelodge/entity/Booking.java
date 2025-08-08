@@ -39,6 +39,7 @@ public class Booking {
     private TravelMode travelMode;
 
     @Column(name = "booking_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp bookingDate;
 
     @Column(name = "check_in", nullable = false)
