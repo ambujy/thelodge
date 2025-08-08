@@ -5,8 +5,6 @@ import lombok.*;
 
 import java.sql.Timestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
 @Table(name = "address", schema = "thelodge")
 @Data
@@ -27,14 +25,11 @@ public class Address {
     private String pincode;
 
     @Column(name = "created_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updatedAt;
 
     @Column(name = "deleted_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp deletedAt;
 }

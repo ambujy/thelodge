@@ -3,6 +3,7 @@ package com.thelodge.dto;
 import lombok.*;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thelodge.enums.BookingStatusType;
 
 @Data
@@ -14,5 +15,6 @@ public class BookingStatusDto {
     private Integer bookingId;
     private BookingStatusType status;
     private String changedBy;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime changedAt;
 }

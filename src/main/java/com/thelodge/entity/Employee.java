@@ -5,8 +5,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thelodge.enums.GenderType;
 
 @Entity
@@ -58,7 +56,6 @@ public class Employee {
 
     @Builder.Default
     @Column(name = "created_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
@@ -66,7 +63,6 @@ public class Employee {
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deletedAt;
 
     @Enumerated(EnumType.STRING)

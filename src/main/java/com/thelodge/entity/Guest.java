@@ -3,8 +3,6 @@ package com.thelodge.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thelodge.enums.GenderType;
 
 @Entity
@@ -53,14 +51,11 @@ public class Guest {
     private Hotel hotel;
 
     @Column(name = "created_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDate createdAt;
 
     @Column(name = "updated_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDate updatedAt;
 
     @Column(name = "deleted_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDate deletedAt;
 }

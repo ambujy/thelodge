@@ -5,6 +5,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,7 @@ public class EmployeeResponseDto {
     private String idProofType;
     private String idProofNo;
     private String idProofFile;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
     private String gender;
 
@@ -26,7 +29,10 @@ public class EmployeeResponseDto {
     private DesignationDto designation;
     private HotelDto hotel;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deletedAt;
 }

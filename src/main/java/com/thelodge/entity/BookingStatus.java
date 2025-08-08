@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thelodge.enums.BookingStatusType;
 
 @Entity
@@ -29,7 +27,6 @@ public class BookingStatus {
     private BookingStatusType status;
 
     @Column(name = "changed_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp changedAt;
 
     @Column(name = "changed_by")

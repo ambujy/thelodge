@@ -1,5 +1,6 @@
 package com.thelodge.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thelodge.enums.GenderType;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class GuestRequestDto {
     private String idProofType;
     private String idProofNo;
     private String idProofFile;
+    @JsonFormat(pattern = "yyyy-MM-dd")    
     private LocalDate dob;
     private GenderType gender;
     private AddressDto address;
