@@ -14,43 +14,18 @@ import com.thelodge.entity.Hotel;
 import com.thelodge.repository.AddressRepository;
 import com.thelodge.repository.HotelRepository;
 import com.thelodge.service.HotelService;
+import com.thelodge.util.DtoMapper;
+
+import lombok.RequiredArgsConstructor;
 
 
 
 @Service
+@RequiredArgsConstructor
 public class HotelServiceImpl implements HotelService {
 
     private final HotelRepository hotelRepository;
     private final AddressRepository addressRepository;
-
-    public HotelServiceImpl(HotelRepository hotelRepository, AddressRepository addressRepository) {
-        this.hotelRepository = hotelRepository;
-        this.addressRepository = addressRepository;
-    }
-
-    private HotelResponseDto mapToDto(Hotel hotel) {
-        Address address = hotel.getAddress();
-
-        return HotelResponseDto.builder()
-                .id(hotel.getId())
-                .name(hotel.getName())
-                .contact1(hotel.getContact1())
-                .contact2(hotel.getContact2())
-                .contact3(hotel.getContact3())
-                .email(hotel.getEmail())
-                .website(hotel.getWebsite())
-                .description(hotel.getDescription())
-                .roomCapacity(hotel.getRoomCapacity())
-                .address(AddressDto.builder()
-                        .line1(address.getLine1())
-                        .line2(address.getLine2())
-                        .line3(address.getLine3())
-                        .city(address.getCity())
-                        .state(address.getState())
-                        .pincode(address.getPincode())
-                        .build())
-                .build();
-    }
 
     @Override
     public HotelResponseDto createHotel(HotelRequestDto hotelRequestDto) {
@@ -86,7 +61,7 @@ public class HotelServiceImpl implements HotelService {
         hotel = hotelRepository.save(hotel);
 
         // Build response DTO (customize as needed)
-        return mapToDto(hotel);
+        return DtoMapper.mapToHotelAddressDto(hotel);
     }
 
 
@@ -94,7 +69,7 @@ public class HotelServiceImpl implements HotelService {
     public List<HotelResponseDto> getAllHotels() {
         // Implementation for fetching all hotels
         return hotelRepository.findAll().stream()
-                .map(this::mapToDto)
+                .map(DtoMapper::mapToHotelAddressDto)
                 .toList(); // Convert to List<HotelResponseDto>
     }
 
@@ -102,7 +77,7 @@ public class HotelServiceImpl implements HotelService {
     public HotelResponseDto getHotelById(Integer id) {
         // Implementation for fetching a hotel by ID
         return hotelRepository.findById(id)
-                .map(this::mapToDto)
+                .map(DtoMapper::mapToHotelAddressDto)
                 .orElse(null); // Return null if hotel not found
     }
 
@@ -134,7 +109,7 @@ public class HotelServiceImpl implements HotelService {
         addressRepository.save(address);
         Hotel updatedHotel = hotelRepository.save(hotel);
 
-        return mapToDto(updatedHotel);
+        return DtoMapper.mapToHotelAddressDto(updatedHotel);
     }
 
 

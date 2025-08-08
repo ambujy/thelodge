@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "booking", schema = "thelodge")
 @Data
@@ -52,19 +54,19 @@ public class Booking {
     private BigDecimal totalAmount;
 
     @Column(name = "created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createdAt;
 
     @Column(name = "updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updatedAt;
 
     @Column(name = "deleted_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp deletedAt;
 
     @Builder.Default
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingRoom> bookingRooms = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookingStatus> bookingStatuses = new ArrayList<>();
 }

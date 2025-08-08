@@ -56,19 +56,19 @@ public class GuestServiceImpl implements GuestService {
                 .createdAt(LocalDate.now())
                 .build();
 
-        return DtoMapper.mapToGuestDto(guestRepository.save(guest));
+        return DtoMapper.mapToGuestResponseDto(guestRepository.save(guest));
     }
 
     @Override
     public GuestResponseDto getGuestById(Integer id) {
-        return guestRepository.findById(id).map(DtoMapper::mapToGuestDto).orElse(null);
+        return guestRepository.findById(id).map(DtoMapper::mapToGuestResponseDto).orElse(null);
     }
 
     @Override
     public List<GuestResponseDto> getAllGuests() {
         return guestRepository.findAll()
                 .stream()
-                .map(DtoMapper::mapToGuestDto)
+                .map(DtoMapper::mapToGuestResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -107,7 +107,7 @@ public class GuestServiceImpl implements GuestService {
         guest.setHotel(hotel);
         guest.setAddress(address);
 
-        return DtoMapper.mapToGuestDto(guestRepository.save(guest));
+        return DtoMapper.mapToGuestResponseDto(guestRepository.save(guest));
     }
 
     @Override

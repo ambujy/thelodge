@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.thelodge.enums.BookingStatusType;
+
 @Entity
 @Table(name = "booking_status", schema = "thelodge")
 @Data
@@ -21,10 +24,12 @@ public class BookingStatus {
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private BookingStatusType status;
 
     @Column(name = "changed_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp changedAt;
 
     @Column(name = "changed_by")

@@ -67,21 +67,21 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 .address(address)
                                 .build();
 
-                return DtoMapper.mapToEmployeeDto(employeeRepository.save(employee));
+                return DtoMapper.mapToEmployeeResponseDto(employeeRepository.save(employee));
         }
 
         @Override
         public EmployeeResponseDto getEmployeeById(Integer id) {
                 Employee employee = employeeRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("Employee not found"));
-                return DtoMapper.mapToEmployeeDto(employee);
+                return DtoMapper.mapToEmployeeResponseDto(employee);
         }
 
         @Override
         public List<EmployeeResponseDto> getAllEmployees() {
                 return employeeRepository.findAll()
                                 .stream()
-                                .map(DtoMapper::mapToEmployeeDto)
+                                .map(DtoMapper::mapToEmployeeResponseDto)
                                 .toList();
         }
 
@@ -122,7 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setHotel(hotel);
                 employee.setDesignation(designation);
 
-                return DtoMapper.mapToEmployeeDto(employeeRepository.save(employee));
+                return DtoMapper.mapToEmployeeResponseDto(employeeRepository.save(employee));
         }
 
         @Override

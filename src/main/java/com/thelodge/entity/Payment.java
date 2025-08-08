@@ -1,5 +1,6 @@
 package com.thelodge.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thelodge.enums.PaymentStatusType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,11 +45,14 @@ public class Payment {
 
     @Builder.Default
     @Column(name = "created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deletedAt;
 }

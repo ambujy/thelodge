@@ -1,12 +1,69 @@
 package com.thelodge.util;
 
+import java.util.stream.Collectors;
+
 import com.thelodge.dto.*;
 import com.thelodge.entity.*;
 
 public class DtoMapper {
 
+    public static BookingResponseDto mapToBookingResponseDto(Booking booking) {
+        if (booking == null)
+            return null;
+
+        return BookingResponseDto.builder()
+                .id(booking.getId())
+                .guest(mapToGuestDto(booking.getGuest()))
+                .employee(mapToEmployeeDto(booking.getEmployee()))
+                .hotel(mapToHotelDto(booking.getHotel()))
+                .travelMode(mapToTravelModeDto(booking.getTravelMode()))
+                .bookingDate(booking.getBookingDate().toLocalDateTime())
+                .checkIn(booking.getCheckIn().toLocalDateTime())
+                .checkOut(booking.getCheckOut().toLocalDateTime())
+                .totalRooms(booking.getTotalRooms())
+                // Map each BookingRoom to RoomResponseDto
+                .rooms(
+                        booking.getBookingRooms().stream()
+                                .map(br -> mapToRoomDto(br.getRoom()))
+                                .collect(Collectors.toList()))
+                .totalAmount(booking.getTotalAmount())
+                .createdAt(booking.getCreatedAt().toLocalDateTime())
+                .updatedAt(booking.getUpdatedAt() != null ? booking.getUpdatedAt().toLocalDateTime() : null)
+                .deletedAt(booking.getDeletedAt() != null ? booking.getDeletedAt().toLocalDateTime() : null)
+                .build();
+    }
+
+    public static BookingStatusDto mapToBookingStatusDto(BookingStatus status) {
+        return BookingStatusDto.builder()
+                .id(status.getId())
+                .bookingId(status.getBooking().getId())
+                .status(status.getStatus())
+                .changedAt(null != status.getChangedAt() ? status.getChangedAt().toLocalDateTime() : null)
+                .build();
+    }
+
+    public static BookingRoomDto mapToBookingRoomDto(BookingRoom bookingRoom) {
+        if (bookingRoom == null)
+            return null;
+
+        return BookingRoomDto.builder()
+                .roomId(bookingRoom.getRoom().getId())
+                .build();
+    }
+
+    public static TravelModeDto mapToTravelModeDto(TravelMode travelMode) {
+        if (travelMode == null)
+            return null;
+
+        return TravelModeDto.builder()
+                .id(travelMode.getId())
+                .name(travelMode.getName())
+                .build();
+    }
+
     public static RoomResponseDto mapToRoomDto(Room room) {
-        if (room == null) return null;
+        if (room == null)
+            return null;
 
         return RoomResponseDto.builder()
                 .id(room.getId())
@@ -17,7 +74,8 @@ public class DtoMapper {
     }
 
     public static Room mapToRoomEntity(RoomRequestDto dto, RoomType roomType, Hotel hotel) {
-        if (dto == null) return null;
+        if (dto == null)
+            return null;
 
         return Room.builder()
                 .roomNumber(dto.getRoomNumber())
@@ -27,7 +85,8 @@ public class DtoMapper {
     }
 
     public static RoomTypeDto mapToRoomTypeDto(RoomType type) {
-        if (type == null) return null;
+        if (type == null)
+            return null;
 
         return RoomTypeDto.builder()
                 .id(type.getId())
@@ -39,8 +98,20 @@ public class DtoMapper {
                 .build();
     }
 
+    public static GuestDto mapToGuestDto(Guest guest) {
+        if (guest == null)
+            return null;
 
-    public static GuestResponseDto mapToGuestDto(Guest guest) {
+        return GuestDto.builder()
+                .id(guest.getId())
+                .firstName(guest.getFirstName())
+                .lastName(guest.getLastName())
+                .phone(guest.getPhone())
+                .email(guest.getEmail())
+                .build();
+    }
+
+    public static GuestResponseDto mapToGuestResponseDto(Guest guest) {
         return GuestResponseDto.builder()
                 .id(guest.getId())
                 .firstName(guest.getFirstName())
@@ -56,7 +127,20 @@ public class DtoMapper {
                 .build();
     }
 
-    public static EmployeeResponseDto mapToEmployeeDto(Employee employee) {
+    public static EmployeeDto mapToEmployeeDto(Employee employee) {
+        if (employee == null)
+            return null;
+
+        return EmployeeDto.builder()
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .phone(employee.getPhone())
+                .email(employee.getEmail())
+                .build();
+    }
+
+    public static EmployeeResponseDto mapToEmployeeResponseDto(Employee employee) {
         return EmployeeResponseDto.builder()
                 .id(employee.getId())
                 .firstName(employee.getFirstName())
