@@ -93,19 +93,20 @@ public class BookingServiceImpl implements BookingService {
 
         int totalRooms = requestDTO.getTotalRooms();
 
-        Booking booking = new Booking();
-        booking.setGuest(guest);
-        booking.setTravelMode(travelMode);
-        booking.setEmployee(employee);
-        booking.setHotel(hotel);
-        booking.setBookingDate(Timestamp.valueOf(LocalDateTime.now()));
-        booking.setTotalRooms(totalRooms);
-        booking.setTotalAmount(requestDTO.getTotalAmount());
-        booking.setCheckIn(checkInTimestamp);
-        booking.setCheckOut(checkOutTimestamp);
-        booking.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        Booking booking = Booking.builder()
+                .guest(guest)
+                .travelMode(travelMode)
+                .employee(employee)
+                .hotel(hotel)
+                .totalRooms(totalRooms)
+                .totalAmount(requestDTO.getTotalAmount())
+                .checkIn(checkInTimestamp)
+                .checkOut(checkOutTimestamp)
+                .bookingDate(Timestamp.valueOf(LocalDateTime.now()))
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
+                .build();
 
-        
         // Allocate rooms for this booking
         for (Integer roomId : requestDTO.getRooms()) {
             if (roomId == null) {
@@ -115,13 +116,13 @@ public class BookingServiceImpl implements BookingService {
             Room room = roomRepository.findById(roomId)
                     .orElseThrow(() -> new RuntimeException("Room not found: " + roomId));
 
-            BookingRoom bookingRoom = new BookingRoom();
-            bookingRoom.setBooking(booking);
-            bookingRoom.setRoom(room);
+            BookingRoom bookingRoom = BookingRoom.builder()
+                    .booking(booking)
+                    .room(room)
+                    .build();
             bookingRoomRepository.save(bookingRoom);
         }
 
-        
         try {
             booking = bookingRepository.save(booking);
         } catch (Exception e) {
@@ -133,14 +134,16 @@ public class BookingServiceImpl implements BookingService {
             throw e;
         }
 
-
         // Add booking status (initial: BOOKED)
-        BookingStatus status = new BookingStatus();
-        status.setBooking(booking);
-        status.setStatus(BookingStatusType.BOOKED);
-        bookingStatusRepository.save(status);        
+        BookingStatus status = BookingStatus.builder()
+                .booking(booking)
+                .status(BookingStatusType.BOOKED)
+                .changedAt(Timestamp.valueOf(LocalDateTime.now()))
+                .changedBy(employee.getFirstName() + " " + employee.getLastName()) 
+                .build();
 
-    
+        bookingStatusRepository.save(status);
+
         return DtoMapper.mapToBookingResponseDto(booking);
     }
 
@@ -182,8 +185,90 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponseDto updateBooking(Integer id, BookingRequestDto requestDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateBooking'");
+        // Get existing booking
+        Booking existingBooking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Booking not found with id: " + id));
+
+        // Fetch travel mode
+
+        if (requestDTO.getTravelModeId() == null) {
+            throw new RuntimeException("Travel Mode is required");
+        }
+
+        TravelMode travelMode = travelModeRepository.findById(requestDTO.getTravelModeId())
+                .orElseThrow(() -> new RuntimeException("Travel Mode not found"));
+
+        // Employee validation
+        if (requestDTO.getEmployeeId() == null) {
+            throw new RuntimeException("Employee is required");
+        }
+
+        Employee employee = employeeRepository.findById(requestDTO.getEmployeeId())
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        // Hotel validation
+        if (requestDTO.getHotelId() == null) {
+            throw new RuntimeException("Hotel is required");
+        }
+        Hotel hotel = hotelRepository.findById(requestDTO.getHotelId())
+                .orElseThrow(() -> new RuntimeException("Hotel not found"));
+
+        // Create booking entity
+
+        LocalDateTime checkIn = requestDTO.getCheckIn();
+        Timestamp checkInTimestamp = (checkIn != null) ? Timestamp.valueOf(checkIn) : null;
+
+        LocalDateTime checkOut = requestDTO.getCheckOut();
+        Timestamp checkOutTimestamp = (checkOut != null) ? Timestamp.valueOf(checkOut) : null;
+
+        LocalDateTime bookingDateTime = requestDTO.getBookingDate();
+        Timestamp bookingDateTimestamp = (bookingDateTime != null) ? Timestamp.valueOf(bookingDateTime) : null;
+
+        int totalRooms = requestDTO.getTotalRooms();
+
+        Booking booking = Booking.builder()
+                .guest(existingBooking.getGuest())
+                .bookingDate(bookingDateTimestamp)
+                .travelMode(travelMode)
+                .employee(employee)
+                .hotel(hotel)
+                .totalRooms(totalRooms)
+                .totalAmount(requestDTO.getTotalAmount())
+                .checkIn(checkInTimestamp)
+                .checkOut(checkOutTimestamp)
+                .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
+                .build();
+
+        // Allocate rooms for this booking
+        for (Integer roomId : requestDTO.getRooms()) {
+            if (roomId == null) {
+                throw new RuntimeException("Room number cannot be null");
+            }
+
+            Room room = roomRepository.findById(roomId)
+                    .orElseThrow(() -> new RuntimeException("Room not found: " + roomId));
+
+            BookingRoom bookingRoom = BookingRoom.builder()
+                    .booking(booking)
+                    .room(room)
+                    .build();
+            bookingRoomRepository.save(bookingRoom);
+        }
+
+
+        booking = bookingRepository.save(booking);
+
+        // Add booking status (initial: BOOKED)
+        BookingStatus status = BookingStatus.builder()
+                .booking(booking)
+                .status(requestDTO.getStatus() != null ? requestDTO.getStatus() : BookingStatusType.BOOKED)
+                .changedAt(Timestamp.valueOf(LocalDateTime.now()))
+                .changedBy(employee.getFirstName() + " " + employee.getLastName()) 
+                .build();
+
+        bookingStatusRepository.save(status);
+
+        return DtoMapper.mapToBookingResponseDto(booking);
     }
 
     @Override

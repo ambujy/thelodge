@@ -20,6 +20,8 @@ public class BookingResponseDto {
     private Integer totalRooms;
     private List<RoomResponseDto> rooms;
     private TravelModeDto travelMode;
+    private BigDecimal totalAmount;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime bookingDate;
 
@@ -28,11 +30,13 @@ public class BookingResponseDto {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime checkOut;
-    private BigDecimal totalAmount;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
+    
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deletedAt;
 }

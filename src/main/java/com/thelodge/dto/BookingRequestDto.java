@@ -20,7 +20,10 @@ public class BookingRequestDto {
     private Integer totalRooms;
     private List<Integer> rooms;
     private Integer travelModeId;
-    
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime bookingDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime checkIn;
 

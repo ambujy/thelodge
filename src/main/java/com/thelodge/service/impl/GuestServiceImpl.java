@@ -9,7 +9,7 @@ import com.thelodge.util.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +53,7 @@ public class GuestServiceImpl implements GuestService {
                 .gender(dto.getGender())
                 .address(address)
                 .hotel(hotel)
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         return DtoMapper.mapToGuestResponseDto(guestRepository.save(guest));
@@ -103,7 +103,7 @@ public class GuestServiceImpl implements GuestService {
         guest.setIdProofFile(dto.getIdProofFile());
         guest.setDob(dto.getDob());
         guest.setGender(dto.getGender());
-        guest.setUpdatedAt(LocalDate.now());
+        guest.setUpdatedAt(LocalDateTime.now());
         guest.setHotel(hotel);
         guest.setAddress(address);
 
