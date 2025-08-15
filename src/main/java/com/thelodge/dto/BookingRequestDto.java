@@ -19,6 +19,7 @@ public class BookingRequestDto {
     private BookingStatusType status;
     private Integer totalRooms;
     private List<Integer> rooms;
+    private List<Integer> guests;
     private Integer travelModeId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -26,6 +26,11 @@ public class DtoMapper {
                         booking.getBookingRooms().stream()
                                 .map(br -> mapToRoomDto(br.getRoom()))
                                 .collect(Collectors.toList()))
+                // Map each BookingGuest to GuestDto
+                .guests(
+                        booking.getBookingGuests().stream()
+                                .map(bg -> mapToGuestDto(bg.getGuest()))
+                                .collect(Collectors.toList()))
                 .totalAmount(booking.getTotalAmount())
                 .createdAt(booking.getCreatedAt().toLocalDateTime())
                 .updatedAt(booking.getUpdatedAt() != null ? booking.getUpdatedAt().toLocalDateTime() : null)

@@ -7,6 +7,7 @@ import com.thelodge.dto.HotelDto;
 import com.thelodge.dto.RoomRequestDto;
 import com.thelodge.dto.TravelModeDto;
 import com.thelodge.entity.Booking;
+import com.thelodge.entity.BookingGuest;
 import com.thelodge.entity.BookingRoom;
 import com.thelodge.entity.BookingStatus;
 import com.thelodge.entity.Employee;
@@ -15,6 +16,7 @@ import com.thelodge.entity.Hotel;
 import com.thelodge.entity.Room;
 import com.thelodge.entity.TravelMode;
 import com.thelodge.enums.BookingStatusType;
+import com.thelodge.repository.BookingGuestRepository;
 import com.thelodge.repository.BookingRepository;
 import com.thelodge.repository.BookingRoomRepository;
 import com.thelodge.repository.BookingStatusRepository;
@@ -45,6 +47,7 @@ public class BookingServiceImpl implements BookingService {
     private final TravelModeRepository travelModeRepository;
     private final RoomRepository roomRepository;
     private final BookingRoomRepository bookingRoomRepository;
+    private final BookingGuestRepository bookingGuestRepository;
     private final BookingStatusRepository bookingStatusRepository;
     private final EmployeeRepository employeeRepository;
     private final HotelRepository hotelRepository;
@@ -106,6 +109,22 @@ public class BookingServiceImpl implements BookingService {
                 .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                 .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
+
+        // Allocate guests for this booking
+        for (Integer guestId : requestDTO.getGuests()) {
+            if (guestId == null) {
+                throw new RuntimeException("Guest ID cannot be null");
+            }
+
+            Guest guests = guestRepository.findById(guestId)
+                    .orElseThrow(() -> new RuntimeException("Guest not found: " + guestId));
+
+            BookingGuest bookingGuest = BookingGuest.builder()
+                    .booking(booking)
+                    .guest(guests)
+                    .build();
+            bookingGuestRepository.save(bookingGuest);
+        }
 
         // Allocate rooms for this booking
         for (Integer roomId : requestDTO.getRooms()) {

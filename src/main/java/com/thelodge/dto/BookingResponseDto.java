@@ -19,6 +19,7 @@ public class BookingResponseDto {
     private String status;
     private Integer totalRooms;
     private List<RoomResponseDto> rooms;
+    private List<GuestDto> guests;
     private TravelModeDto travelMode;
     private BigDecimal totalAmount;
 
