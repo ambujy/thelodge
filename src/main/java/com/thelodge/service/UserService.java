@@ -1,4 +1,4 @@
-package com.thelodge.service.impl;
+package com.thelodge.service;
 
 import com.thelodge.entity.auth.Users;
 import com.thelodge.entity.auth.Role;
@@ -18,11 +18,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
