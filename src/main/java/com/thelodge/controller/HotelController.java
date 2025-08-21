@@ -2,12 +2,15 @@ package com.thelodge.controller;
 
 import com.thelodge.dto.HotelRequestDto;
 import com.thelodge.dto.HotelResponseDto;
+import com.thelodge.dto.PageDTO;
 import com.thelodge.service.HotelService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+// import java.util.List;
 
 @RestController
 @RequestMapping("/api/hotels")
@@ -23,8 +26,8 @@ public class HotelController {
     }
     
     @GetMapping
-    public ResponseEntity<List<HotelResponseDto>> getAllHotels() {
-        return ResponseEntity.ok(hotelService.getAllHotels());
+    public ResponseEntity<PageDTO<HotelResponseDto>> getAllHotels(Pageable pageable) {
+        return ResponseEntity.ok(hotelService.getAllHotels(pageable));
     }
 
     @GetMapping("/{id}")

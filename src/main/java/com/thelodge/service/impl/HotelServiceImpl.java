@@ -4,11 +4,14 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.thelodge.dto.AddressDto;
 import com.thelodge.dto.HotelRequestDto;
 import com.thelodge.dto.HotelResponseDto;
+import com.thelodge.dto.PageDTO;
 import com.thelodge.entity.Address;
 import com.thelodge.entity.Hotel;
 import com.thelodge.repository.AddressRepository;
@@ -66,11 +69,25 @@ public class HotelServiceImpl implements HotelService {
 
 
     @Override
-    public List<HotelResponseDto> getAllHotels() {
-        // Implementation for fetching all hotels
-        return hotelRepository.findAll().stream()
-                .map(DtoMapper::mapToHotelAddressDto)
-                .toList(); // Convert to List<HotelResponseDto>
+    public PageDTO<HotelResponseDto> getAllHotels(Pageable pageable) {
+
+        Page<Hotel> hotelPage = hotelRepository.findAll(pageable);
+
+        List<HotelResponseDto> hotels = hotelPage
+                                                .getContent()
+                                                .stream()
+                                                .map(DtoMapper::mapToHotelAddressDto)
+                                                .toList();
+
+        return PageDTO.<HotelResponseDto>builder()
+                        .data(hotels)
+                        .pageNumber(hotelPage.getNumber())
+                        .pageSize(hotelPage.getSize())
+                        .totalElements(hotelPage.getTotalElements())
+                        .totalPages(hotelPage.getTotalPages())
+                        .hasNext(hotelPage.hasNext())
+                        .hasPrevious(hotelPage.hasPrevious())
+                        .build();
     }
 
     @Override

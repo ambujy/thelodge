@@ -4,6 +4,7 @@ import com.thelodge.dto.BookingRequestDto;
 import com.thelodge.dto.BookingResponseDto;
 import com.thelodge.dto.EmployeeDto;
 import com.thelodge.dto.HotelDto;
+import com.thelodge.dto.PageDTO;
 import com.thelodge.dto.RoomRequestDto;
 import com.thelodge.dto.TravelModeDto;
 import com.thelodge.entity.Booking;
@@ -31,6 +32,9 @@ import com.thelodge.util.DtoMapper;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -200,6 +204,37 @@ public class BookingServiceImpl implements BookingService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageDTO<BookingResponseDto> getAllBookings(Pageable pageable) {
+        // Fetch all bookings and map to DTOs
+
+        Page<Booking> bookingPage = bookingRepository.findAll(pageable);
+
+        List<BookingResponseDto> data = bookingPage.getContent().stream()
+                .map(booking -> {
+
+                    BookingResponseDto dto = DtoMapper.mapToBookingResponseDto(booking);
+
+                    // Fetch single status
+                    BookingStatus status = bookingStatusRepository.findByBookingId(booking.getId());
+                    if (status != null) {
+                        dto.setStatus(status.getStatus().name());
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return PageDTO.<BookingResponseDto>builder()
+                .data(data)
+                .pageNumber(bookingPage.getNumber())
+                .pageSize(bookingPage.getSize())
+                .totalElements(bookingPage.getTotalElements())
+                .totalPages(bookingPage.getTotalPages())
+                .hasNext(bookingPage.hasNext())
+                .hasPrevious(bookingPage.hasPrevious())
+                .build();
     }
 
     @Override

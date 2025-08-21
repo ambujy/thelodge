@@ -2,11 +2,13 @@ package com.thelodge.controller;
 
 import com.thelodge.dto.BookingRequestDto;
 import com.thelodge.dto.BookingResponseDto;
+import com.thelodge.dto.PageDTO;
 import com.thelodge.service.BookingService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +31,17 @@ public class BookingController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    // @GetMapping
+    // public ResponseEntity<List<BookingResponseDto>> getAllBookings() {
+    //     List<BookingResponseDto> responseDTOs = bookingService.getAllBookings();
+    //     return ResponseEntity.ok(responseDTOs);
+    // }
+
+
     @GetMapping
-    public ResponseEntity<List<BookingResponseDto>> getAllBookings() {
-        List<BookingResponseDto> responseDTOs = bookingService.getAllBookings();
-        return ResponseEntity.ok(responseDTOs);
+    public ResponseEntity<PageDTO<BookingResponseDto>> getAllBookings(Pageable pageable) {
+        PageDTO<BookingResponseDto> responseDTO = bookingService.getAllBookings(pageable);
+        return ResponseEntity.ok(responseDTO);
     }
 
     // You can add more endpoints as needed, for example:
